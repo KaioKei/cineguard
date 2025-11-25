@@ -1,7 +1,9 @@
-server:
-  address: "127.0.0.1"
-  port: "8080"
-database:
-  url: "file:///tmp/cineguard.db"
-  username: "frodo"
-  password: "baggins"
+cineguard:
+  log-level: "debug"
+  serve:
+    address: "127.0.0.1"
+    port: "8081"
+  database:
+    url: "file:///tmp/cineguard.db"
+    username: "frodo"
+    password: "baggins"
