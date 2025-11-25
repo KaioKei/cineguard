@@ -1,0 +1,32 @@
+components:
+  schemas:
+    Status:
+      type: object
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+info:
+  description: REST API for Cineguard
+  title: Cineguard Rest API
+  version: 0.1.0
+openapi: 3.1.0
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /api/v1/health:
+    get:
+      description: 'Returns the status of the cineguard server.
+      "OK" means that everything is running fine.
+      "NOTOK" means that a service is not responding'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+                example:
+                  status: "OK"
+          description: "Server is healthy and everything is running fine"
+      summary: "status of the cineguard server"
+
