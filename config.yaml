@@ -2,8 +2,10 @@ cineguard:
   log-level: "debug"
   serve:
     address: "127.0.0.1"
-    port: "8081"
+    port: "8080"
   database:
-    url: "file:///tmp/cineguard.db"
-    username: "frodo"
-    password: "baggins"
+    type: postgres
+    address: "0.0.0.0"
+    port: "5432"
+    username: "myuser"
+    password: "mypassword"

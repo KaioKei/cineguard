@@ -1,0 +1,32 @@
+@startuml
+' source https://medium.com/@elvis.gosselin/plantuml-for-database-modeling-1b71e6d4622d
+
+' configuration
+hide circle
+skinparam linetype ortho
+
+' comment
+entity "Movie" as movie {
+ id: hash(title,director,year)
+ --
+ title: varchar2(256)
+ director: varchar2(256)
+ year: varchar2(256)
+ genre: enum('action', 'adventure', 'comedy', 'crime', 'mystery',\n 'fantasy', 'historical', 'historical fiction', 'horror', 'romance',\n 'satire', 'science fiction', 'speculative', 'thriller', 'isekai', 'western')
+ imdb_rating: float(4)
+}
+
+entity "people" as people {
+ id: hash(first_name, last_name, birth)
+ --
+ first_name: varchar2(128)
+ last_name: varchar2(128)
+ birth: date
+}
+
+note right
+ <b>Note</b>
+ This is the movie table
+end note
+
+@enduml
