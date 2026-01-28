@@ -7,7 +7,7 @@
  * https://opensource.org/licenses/MIT.
  */
 
-package cmd
+package shell
 
 import (
 	"fmt"

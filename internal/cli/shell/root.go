@@ -1,4 +1,4 @@
-package cmd
+package shell
 
 import (
 	"fmt"
@@ -13,8 +13,6 @@ import (
 
 var (
 	cfgFile   string
-	address   string
-	port      string
 	debug     bool
 	logFormat string
 	logLevel  string
@@ -60,10 +58,14 @@ func Execute() {
 // initConfig reads in config file and ENV variables if set and populate CLI flags buffer thanks to viper
 func initConfig() {
 	// Parse config file with viper
-	ReadViperConfigE(viper.GetViper(), rootCmd)
+	if err := ReadViperConfigE(viper.GetViper(), rootCmd); err != nil {
+		logrus.Fatalf("Error reading config: %s", err)
+	}
 
 	// Initialize and populate cobra CLI root flags values with viper
-	InitViperSubCmdE(viper.GetViper(), rootCmd, &vprFlgsRoot)
+	if err := InitViperSubCmdE(viper.GetViper(), rootCmd, &vprFlgsRoot); err != nil {
+		logrus.Fatalf("Error initializing subcommands: %s", err)
+	}
 
 	// Set logs format
 	switch vprFlgsRoot.LogFormat {
@@ -113,7 +115,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "config.yaml", "Configuration file for Cineguard's server")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "config.yaml", "Configuration file for Cineguard's server")
 
 	// logging level
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Set logrus.SetLevel to \"debug\". This is equivalent to using --log-level=debug. Flags --log-level and --debug flag are mutually exclusive.")
