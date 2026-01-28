@@ -85,11 +85,6 @@ var serveCmd = &cobra.Command{
 		initServer()
 
 		runServer()
-
-		// TODO test creating table and retrieve elements using module 'bun'
-		//   TODO use route /user created for test and have fun
-		//   TODO the user creation does not work and there is a null pointer error to the db reference from the gin context given to the route's method
-
 	},
 }
 
@@ -195,27 +190,15 @@ func initServer() {
 	config.AllowAllOrigins = true
 	router.Use(cors.New(config))
 
-	// Database handler
-	// the db can be retrieved in routes via the context of gin :
-	// ```
-	// db, ok := c.MustGet("db")
-	// if !ok {
-	//   //handle error
-	// }
-	//
-	router.Use(databaseHandler(bundb))
-
 	// paths declarations
 	v1 := router.Group("/api/v1")
 	v1.GET("/health", rest.Health)
 
 	// CRUD movies
 	// TODO add a route to manage the database
-	//		use this route with Bun https://github.com/uptrace/bun for ORM db management:
-	//		- define the models
-	//		- create the table
-	//		- try some things with it
-	v1.POST("/user", rest.CreateUser2(bundb))
+	//		use the example of the table 'users' to do the same for the cinguard db tables
+	//      check at the architecture diagram in static/diagrams/database_architecture.puml
+	v1.POST("/user", rest.CreateUser(bundb))
 	v1.GET("/movies", rest.ListMovies)
 	v1.POST("/movies", rest.CreateMovie)
 

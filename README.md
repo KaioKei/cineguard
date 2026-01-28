@@ -7,7 +7,7 @@ A nice tool to manage your favorite movies or those you wanna watch
 Build :
 
 ```sh
-make build
+make build 
 ```
 
 Start a PostgreSql database :
@@ -40,3 +40,8 @@ curl localhost:8080/api/v1/health
 ```sh
 make build
 ```
+
+## TODO
+
+models for sql tables have been done.
+Now it is time to create the database, the tables and start to experiment with it :)

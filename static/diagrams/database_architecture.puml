@@ -1,0 +1,135 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+' =========================
+' MAIN ENTITIES
+' =========================
+
+entity movies {
+  + id : INT64 <<PK>>
+  --
+  title : TEXT
+  year : SMALLINT
+  synopsis: LONGTEXT
+  imdb_rating : DECIMAL(3,1)
+  user_rating : DECIMAL(3,1)
+}
+
+note right
+ <b>Note</b>
+ Id is hash(title,director,year).
+ It is important to note that the many-to-many
+ relationships for people's acting, working, movie genres, themes ...
+ are handled by specific tables to keep the referential integrity.
+ Cast is the list of the peoples IDs acting in the movie
+ Crew is the list of the peoples IDs making the movie
+end note
+
+entity people {
+  + id : INT <<PK>>
+  --
+  first_name : VARCHAR
+  last_name : VARCHAR
+  birth_date : DATE
+}
+
+note right
+ <b>Note</b>
+ Id is hash(first_name, last_name, birth_date)
+end note
+
+entity genre {
+  + id : INT <<PK>>
+  --
+  name : VARCHAR <<UNIQUE>>
+}
+
+note right
+ <b>Note</b>
+ Id is hash(genre_name)
+
+ Genres are : "action", "adventure", "comedy",
+ "crime", "mystery", "fantasy", "historical",
+ "historical fiction", "horror", "romance",
+ satire", "science fiction", "speculative",
+ "thriller", "isekai", "western"
+end note
+
+entity movie_genre {
+  + movie_id : INT <<PK, FK>>
+  + genre_id : INT <<PK, FK>>
+}
+
+entity theme {
+  + id : INT <<PK>>
+  --
+  name : VARCHAR <<UNIQUE>>
+}
+
+note right
+ <b>Note</b>
+ Id is hash(theme name)
+ The theme is a 'custom genre' that the user can set to add vision or information they value about the movie.
+ Such as "vengeance", "cathartic" or "chess".
+end note
+
+entity movie_theme {
+  + movie_id : INT <<PK, FK>>
+  + theme_id : INT <<PK, FK>>
+}
+
+entity cast {
+  + movie_id : INT <<PK, FK>>
+  + people_id : INT <<PK, FK>>
+  --
+  character_name : VARCHAR
+}
+
+entity crew {
+  + movie_id : INT <<PK, FK>>
+  + people_id : INT <<PK, FK>>
+  --
+  role_name : VARCHAR
+}
+
+entity user_rating {
+  + id : INT <<PK>>
+  --
+  movie_id : INT <<FK>>
+  directing : TINYINT
+  photography_scenery : TINYINT
+  acting : TINYINT
+  scenario : TINYINT
+  music : TINYINT
+  bonus_rating : TINYINT
+  loved : BOOLEAN
+  comment : TEXT
+  created_at : TIMESTAMP
+}
+
+note right
+ <b>Note</b>
+ Id is hash(movie_id, created_at)
+end note
+
+' =========================
+' RELATIONSHIPS
+' =========================
+
+movies ||--|| user_rating : "is rated"
+
+people }|--|{ cast : "acts in"
+movies ||--|{ cast : "has cast"
+people }|--|{ crew : "works in"
+movies ||--|{ crew : "has crew"
+
+movies ||--|{ movie_genre : "has genre"
+genre ||--|{ movie_genre : "categorize"
+
+movies ||--|{ movie_theme : "has theme"
+theme ||--|{ movie_theme : "categorize"
+
+
+
+@enduml
