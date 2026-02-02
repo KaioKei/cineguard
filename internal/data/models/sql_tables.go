@@ -11,15 +11,15 @@ type Movie struct {
 	ID            int64     `bun:"id,pk,type:bigserial,notnull"`
 	Title         string    `bun:"title,type:text,notnull"`
 	Year          int16     `bun:"year,type:smallint,notnull"`
-	Synopsis      string    `bun:"synopsis,type:longtext"`
+	Synopsis      string    `bun:"synopsis,type:text"`
 	ImdbRating    float32   `bun:"imdb_rating,type:decimal(3,1)"`
 	UserRating    float32   `bun:"user_rating,type:decimal(3,1)"`
 	CreatedAt     time.Time `bun:"createdAt,type:time,notnull,default:current_timestamp"`
 
 	// Cast is composed with people for movie characters
-	Cast []*People `bun:"m2m:movie_cast,join:Movie=Person"`
+	Cast []*People `bun:"m2m:casts,join:Movie=People"`
 	// Crew is composed with people for movie jobs, like director
-	Crew []*People `bun:"m2m:movie_crew,join:Movie=Person"`
+	Crew []*People `bun:"m2m:crews,join:Movie=People"`
 	// Genres
 	Genres []*Genre `bun:"m2m:movie_genres,join:Movie=Genre"`
 	// Themes
@@ -85,9 +85,9 @@ type People struct {
 	BirthDate     string `bun:"birth_date,type:text,notnull"`
 
 	// movies characters in castings
-	Casts []*Movie `bun:"m2m:movie_cast,join:Person=Movie"`
+	Casts []*Movie `bun:"m2m:casts,join:People=Movie"`
 	// movies roles in castings (director, sound, ...)
-	Crews []*Movie `bun:"m2m:movie_crew,join:Person=Movie"`
+	Crews []*Movie `bun:"m2m:crews,join:People=Movie"`
 }
 
 // Cast :
@@ -114,7 +114,7 @@ type Cast struct {
 // It is in essence the relation table between people and a movie for jobs
 // It doesn't have an ID because it is purely relational between people and movies
 type Crew struct {
-	bun.BaseModel `bun:"table:casts"`
+	bun.BaseModel `bun:"table:crews"`
 	RoleName      string `bun:"role_name,type:text,notnull"`
 	// movie relationship
 	MovieID int64  `bun:"movie_id,pk"`
