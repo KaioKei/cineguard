@@ -44,4 +44,5 @@ make build
 ## TODO
 
 models for sql tables have been done.
-Now it is time to create the database, the tables and start to experiment with it :)
+Now it is time to create the database, the tables and start to experiment with it.
+The post method for movie is implemented, now test it.

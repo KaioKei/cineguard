@@ -143,12 +143,22 @@ func initDatabaseConnection() {
 		}
 
 		// create all the tables if they don't exist yet
-		models := []interface{}{
+		tableModels := []interface{}{
 			(*models.User)(nil),
 			(*models.Profile)(nil),
+			// cineguard models
+			(*models.Cast)(nil),
+			(*models.Crew)(nil),
+			(*models.People)(nil),
+			(*models.MovieTheme)(nil),
+			(*models.MovieGenre)(nil),
+			(*models.Theme)(nil),
+			(*models.Genre)(nil),
+			(*models.Movie)(nil),
+			(*models.UserRating)(nil),
 		}
 
-		for _, model := range models {
+		for _, model := range tableModels {
 			_, err := bundb.NewCreateTable().
 				Model(model).
 				IfNotExists().
@@ -200,7 +210,7 @@ func initServer() {
 	//      check at the architecture diagram in static/diagrams/database_architecture.puml
 	v1.POST("/user", rest.CreateUser(bundb))
 	v1.GET("/movies", rest.ListMovies)
-	v1.POST("/movies", rest.CreateMovie)
+	v1.POST("/movies", rest.CreateMovie(bundb))
 
 }
 
